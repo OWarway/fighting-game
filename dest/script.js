@@ -48,7 +48,11 @@ const keys = {
     d: {
         pressed: false,
     },
+    w: {
+        pressed: false,
+    },
 };
+let lastKey;
 // Creates infinate loop
 const animate = () => {
     window.requestAnimationFrame(animate);
@@ -57,10 +61,10 @@ const animate = () => {
     player.update();
     enemy.update();
     player.velocity.x = 0;
-    if (keys.a.pressed) {
+    if (keys.a.pressed && lastKey === "a") {
         player.velocity.x = -1;
     }
-    else if (keys.d.pressed) {
+    else if (keys.d.pressed && lastKey === "d") {
         player.velocity.x = 1;
     }
 };
@@ -70,10 +74,16 @@ window.addEventListener("keydown", (e) => {
     switch (key) {
         case "d": {
             keys.d.pressed = true;
+            lastKey = "d";
             break;
         }
         case "a": {
             keys.a.pressed = true;
+            lastKey = "a";
+            break;
+        }
+        case "w": {
+            player.velocity.y = -10;
             break;
         }
     }
@@ -86,7 +96,11 @@ window.addEventListener("keyup", (e) => {
             break;
         }
         case "a": {
-            keys.d.pressed = false;
+            keys.a.pressed = false;
+            break;
+        }
+        case "w": {
+            keys.w.pressed = false;
             break;
         }
     }
