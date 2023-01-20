@@ -6,11 +6,12 @@ canvas.height = 576;
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 const gravity = 0.2;
 class Sprite {
-    constructor({ position, velocity, height, width, }) {
+    constructor({ position, velocity, height, width, lastKey, }) {
         this.position = position;
         this.velocity = velocity;
         this.height = height;
         this.width = width;
+        this.lastKey = lastKey;
     }
     draw() {
         ctx.fillStyle = "red";
@@ -51,6 +52,15 @@ const keys = {
     w: {
         pressed: false,
     },
+    ArrowRight: {
+        pressed: false,
+    },
+    ArrowLeft: {
+        pressed: false,
+    },
+    ArrowUp: {
+        pressed: false,
+    },
 };
 let lastKey;
 // Creates infinate loop
@@ -61,17 +71,27 @@ const animate = () => {
     player.update();
     enemy.update();
     player.velocity.x = 0;
+    // Player Movement
     if (keys.a.pressed && lastKey === "a") {
         player.velocity.x = -1;
     }
     else if (keys.d.pressed && lastKey === "d") {
         player.velocity.x = 1;
     }
+    // Enemy Movement
+    if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
+        enemy.velocity.x = -1;
+    }
+    else if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
+        enemy.velocity.x = 1;
+    }
 };
 animate();
 window.addEventListener("keydown", (e) => {
     const { key } = e;
+    console.log("key", key);
     switch (key) {
+        // Player 1
         case "d": {
             keys.d.pressed = true;
             lastKey = "d";
@@ -86,11 +106,27 @@ window.addEventListener("keydown", (e) => {
             player.velocity.y = -10;
             break;
         }
+        // Player 2 (enemy)
+        case "ArrowRight": {
+            keys.ArrowRight.pressed = true;
+            enemy.lastKey = "ArrowRight";
+            break;
+        }
+        case "ArrowLeft": {
+            keys.ArrowLeft.pressed = true;
+            enemy.lastKey = "ArrowLeft";
+            break;
+        }
+        case "ArrowUp": {
+            enemy.velocity.y = -10;
+            break;
+        }
     }
 });
 window.addEventListener("keyup", (e) => {
     const { key } = e;
     switch (key) {
+        // Player 1
         case "d": {
             keys.d.pressed = false;
             break;
@@ -99,8 +135,13 @@ window.addEventListener("keyup", (e) => {
             keys.a.pressed = false;
             break;
         }
-        case "w": {
-            keys.w.pressed = false;
+        // Player 2 (enemy)
+        case "ArrowRight": {
+            keys.ArrowRight.pressed = false;
+            break;
+        }
+        case "ArrowLeft": {
+            keys.ArrowLeft.pressed = false;
             break;
         }
     }
