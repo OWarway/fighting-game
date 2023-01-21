@@ -73,13 +73,15 @@ class Sprite {
     ctx!.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     // Draw attack box
-    ctx!.fillStyle = "green";
-    ctx!.fillRect(
-      this.attackBox.position.x,
-      this.attackBox.position.y,
-      this.attackBox.width,
-      this.attackBox.height
-    );
+    if (this.isAttacking) {
+      ctx!.fillStyle = "green";
+      ctx!.fillRect(
+        this.attackBox.position.x,
+        this.attackBox.position.y,
+        this.attackBox.width,
+        this.attackBox.height
+      );
+    }
   }
 
   update() {
@@ -184,6 +186,7 @@ const animate = () => {
     player.attackBox.position.y <= enemy.position.y + enemy.height &&
     player.isAttacking
   ) {
+    player.isAttacking = false;
     console.log("ouch");
   }
 };
@@ -209,6 +212,10 @@ window.addEventListener("keydown", (e) => {
     }
     case "w": {
       player.velocity.y = player.jump;
+      break;
+    }
+    case " ": {
+      player.attack();
       break;
     }
 
