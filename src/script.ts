@@ -7,7 +7,7 @@ canvas!.height = 576;
 
 ctx!.fillRect(0, 0, canvas!.width, canvas!.height);
 
-const gravity = 0.2;
+const gravity = 0.8;
 
 class Sprite {
   position: {
@@ -23,6 +23,7 @@ class Sprite {
   height: number;
   width: number;
   lastKey: unknown;
+  jump: number;
 
   constructor({
     position,
@@ -42,6 +43,9 @@ class Sprite {
     this.height = height;
     this.width = width;
     this.lastKey = lastKey;
+
+    // Default Jump Height
+    this.jump = -20;
   }
 
   draw() {
@@ -52,6 +56,7 @@ class Sprite {
   update() {
     this.draw();
 
+    // PX per frame
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
 
@@ -109,21 +114,26 @@ const animate = () => {
   player.update();
   enemy.update();
 
-  player.velocity.x = 0;
-  enemy.velocity.x = 0;
-
   // Player Movement
+
+  // Stop player from moving when not holding key
+  player.velocity.x = 0;
+
   if (keys.a.pressed && player.lastKey === "a") {
-    player.velocity.x = -1;
+    player.velocity.x = -5;
   } else if (keys.d.pressed && player.lastKey === "d") {
-    player.velocity.x = 1;
+    player.velocity.x = 5;
   }
 
   // Enemy Movement
+
+  // Stop enemy from moving when not holding key
+  enemy.velocity.x = 0;
+
   if (keys.ArrowRight.pressed && enemy.lastKey === "ArrowRight") {
-    enemy.velocity.x = 1;
+    enemy.velocity.x = 5;
   } else if (keys.ArrowLeft.pressed && enemy.lastKey === "ArrowLeft") {
-    enemy.velocity.x = -1;
+    enemy.velocity.x = -5;
   }
 };
 
@@ -147,7 +157,7 @@ window.addEventListener("keydown", (e) => {
       break;
     }
     case "w": {
-      player.velocity.y = -10;
+      player.velocity.y = player.jump;
       break;
     }
 
@@ -163,7 +173,7 @@ window.addEventListener("keydown", (e) => {
       break;
     }
     case "ArrowUp": {
-      enemy.velocity.y = -10;
+      enemy.velocity.y = enemy.jump;
       break;
     }
   }
