@@ -32,8 +32,10 @@ class Sprite {
     };
     width: number;
     height: number;
+    offset: { x: number; y: number };
   };
   isAttacking: boolean;
+  offset: { x: number; y: number };
 
   constructor({
     position,
@@ -42,6 +44,7 @@ class Sprite {
     width,
     lastKey,
     colour = "red",
+    offset,
   }: {
     position: { x: number; y: number };
     velocity: { x: number; y: number };
@@ -49,6 +52,10 @@ class Sprite {
     width: number;
     lastKey?: string;
     colour: string;
+    offset: {
+      x: number;
+      y: number;
+    };
   }) {
     this.position = position;
     this.velocity = velocity;
@@ -57,14 +64,22 @@ class Sprite {
     this.lastKey = lastKey;
     this.colour = colour;
     this.isAttacking = false;
+    this.offset = offset;
 
     // Default Jump Height
     this.jump = -20;
 
     this.attackBox = {
-      position: this.position,
+      position: {
+        x: this.position.x,
+        y: this.position.y,
+      },
       width: 100,
       height: 50,
+      offset: {
+        x: this.offset.x,
+        y: this.offset.y,
+      },
     };
   }
 
@@ -73,19 +88,22 @@ class Sprite {
     ctx!.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     // Draw attack box
-    if (this.isAttacking) {
-      ctx!.fillStyle = "green";
-      ctx!.fillRect(
-        this.attackBox.position.x,
-        this.attackBox.position.y,
-        this.attackBox.width,
-        this.attackBox.height
-      );
-    }
+    // if (this.isAttacking) {
+    ctx!.fillStyle = "green";
+    ctx!.fillRect(
+      this.attackBox.position.x,
+      this.attackBox.position.y,
+      this.attackBox.width,
+      this.attackBox.height
+    );
+    // }
   }
 
   update() {
     this.draw();
+
+    this.attackBox.position.x = this.position.x - this.attackBox.offset.x;
+    this.attackBox.position.y = this.position.y;
 
     // PX per frame
     this.position.x += this.velocity.x;
@@ -113,6 +131,10 @@ const player = new Sprite({
   height: 150,
   width: 50,
   colour: "red",
+  offset: {
+    x: 0,
+    y: 0,
+  },
 });
 
 const enemy = new Sprite({
@@ -121,6 +143,10 @@ const enemy = new Sprite({
   height: 150,
   width: 50,
   colour: "blue",
+  offset: {
+    x: 50,
+    y: 0,
+  },
 });
 
 const keys = {
