@@ -88,15 +88,15 @@ class Sprite {
     ctx!.fillRect(this.position.x, this.position.y, this.width, this.height);
 
     // Draw attack box
-    // if (this.isAttacking) {
-    ctx!.fillStyle = "green";
-    ctx!.fillRect(
-      this.attackBox.position.x,
-      this.attackBox.position.y,
-      this.attackBox.width,
-      this.attackBox.height
-    );
-    // }
+    if (this.isAttacking) {
+      ctx!.fillStyle = "green";
+      ctx!.fillRect(
+        this.attackBox.position.x,
+        this.attackBox.position.y,
+        this.attackBox.width,
+        this.attackBox.height
+      );
+    }
   }
 
   update() {
@@ -172,6 +172,24 @@ const keys = {
 
 let lastKey: string;
 
+const rectangularCollision = ({
+  rectangle1,
+  rectangle2,
+}: {
+  rectangle1: Sprite;
+  rectangle2: Sprite;
+}): boolean => {
+  return (
+    rectangle1.attackBox.position.x + rectangle1.attackBox.width >=
+      rectangle2.position.x &&
+    rectangle1.attackBox.position.x <=
+      rectangle2.position.x + rectangle2.width &&
+    rectangle1.attackBox.position.y + rectangle1.attackBox.height >=
+      rectangle2.position.y &&
+    rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height
+  );
+};
+
 // Creates infinate loop
 const animate = () => {
   window.requestAnimationFrame(animate);
@@ -203,17 +221,21 @@ const animate = () => {
   }
 
   // Collision Detection
-
   // Handle if attack box touches enemy
   if (
-    player.attackBox.position.x + player.attackBox.width >= enemy.position.x &&
-    player.attackBox.position.x <= enemy.position.x + enemy.width &&
-    player.attackBox.position.y + player.attackBox.height >= enemy.position.y &&
-    player.attackBox.position.y <= enemy.position.y + enemy.height &&
+    rectangularCollision({ rectangle1: player, rectangle2: enemy }) &&
     player.isAttacking
   ) {
     player.isAttacking = false;
     console.log("ouch");
+  }
+
+  if (
+    rectangularCollision({ rectangle1: enemy, rectangle2: player }) &&
+    enemy.isAttacking
+  ) {
+    enemy.isAttacking = false;
+    console.log("Oww");
   }
 };
 
@@ -258,6 +280,10 @@ window.addEventListener("keydown", (e) => {
     }
     case "ArrowUp": {
       enemy.velocity.y = enemy.jump;
+      break;
+    }
+    case "ArrowDown": {
+      enemy.attack();
       break;
     }
   }
