@@ -1,37 +1,24 @@
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
     <script src="../dest/script.js" defer></script>
-
-    <style>
-      * {
-        box-sizing: border-box;
-      }
-    </style>
   </head>
   <body>
     <!-- Container -->
-    <div style="position: relative; display: inline-block">
-      <div
-        style="
-          position: absolute;
-          display: flex;
-          align-items: center;
-          width: 100%;
-          padding: 20px;
-        "
-      >
-        <div style="background-color: yellow; height: 30px; width: 100%"></div>
-        <div
-          style="
-            background-color: red;
-            width: 100px;
-            height: 100px;
-            flex-shrink: 0;
-          "
-        ></div>
-        <div style="background-color: yellow; height: 30px; width: 100%"></div>
+    <div class="container">
+      <div class="healthContainer">
+        <div class="healthBarContainer" style="transform: rotateY(180deg)">
+          <div class="healthBarUnderlay"></div>
+          <div id="playerHealth" class="healthBar"></div>
+        </div>
+        <div class="timer"></div>
+        <div class="healthBarContainer">
+          <div class="healthBarUnderlay"></div>
+          <div id="enemyHealth" class="healthBar"></div>
+        </div>
       </div>
       <canvas></canvas>
     </div>
   </body>
 </html>
+d

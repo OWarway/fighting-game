@@ -15,6 +15,7 @@ class Sprite {
         this.colour = colour;
         this.isAttacking = false;
         this.offset = offset;
+        this.health = 100;
         // Default Jump Height
         this.jump = -20;
         this.attackBox = {
@@ -143,12 +144,16 @@ const animate = () => {
     if (rectangularCollision({ rectangle1: player, rectangle2: enemy }) &&
         player.isAttacking) {
         player.isAttacking = false;
-        console.log("ouch");
+        const enemyHealthBar = document.querySelector("#enemyHealth");
+        enemy.health -= 10;
+        enemyHealthBar.style.width = enemy.health.toString() + "%";
     }
     if (rectangularCollision({ rectangle1: enemy, rectangle2: player }) &&
         enemy.isAttacking) {
         enemy.isAttacking = false;
-        console.log("Oww");
+        const playerHealthBar = document.querySelector("#playerHealth");
+        player.health -= 10;
+        playerHealthBar.style.width = player.health.toString() + "%";
     }
 };
 animate();

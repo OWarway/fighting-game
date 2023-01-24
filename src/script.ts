@@ -36,6 +36,7 @@ class Sprite {
   };
   isAttacking: boolean;
   offset: { x: number; y: number };
+  health: number;
 
   constructor({
     position,
@@ -65,6 +66,7 @@ class Sprite {
     this.colour = colour;
     this.isAttacking = false;
     this.offset = offset;
+    this.health = 100;
 
     // Default Jump Height
     this.jump = -20;
@@ -227,7 +229,11 @@ const animate = () => {
     player.isAttacking
   ) {
     player.isAttacking = false;
-    console.log("ouch");
+    const enemyHealthBar = document.querySelector(
+      "#enemyHealth"
+    ) as HTMLElement;
+    enemy.health -= 10;
+    enemyHealthBar.style.width = enemy.health.toString() + "%";
   }
 
   if (
@@ -235,7 +241,11 @@ const animate = () => {
     enemy.isAttacking
   ) {
     enemy.isAttacking = false;
-    console.log("Oww");
+    const playerHealthBar = document.querySelector(
+      "#playerHealth"
+    ) as HTMLElement;
+    player.health -= 10;
+    playerHealthBar.style.width = player.health.toString() + "%";
   }
 };
 
