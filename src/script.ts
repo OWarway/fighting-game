@@ -249,6 +249,21 @@ const animate = () => {
   }
 };
 
+let timer = 30;
+const decreaseTimer = () => {
+  if (timer > 0) {
+    setTimeout(() => {
+      timer--;
+      const UITimer = document.querySelector(".timer");
+      UITimer!.innerHTML = timer.toString();
+
+      decreaseTimer();
+    }, 1000);
+  }
+};
+
+decreaseTimer();
+
 animate();
 
 window.addEventListener("keydown", (e) => {
