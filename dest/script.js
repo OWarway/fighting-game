@@ -156,7 +156,7 @@ const animate = () => {
         playerHealthBar.style.width = player.health.toString() + "%";
     }
 };
-let timer = 30;
+let timer = 10;
 const decreaseTimer = () => {
     if (timer > 0) {
         setTimeout(() => {
@@ -165,6 +165,19 @@ const decreaseTimer = () => {
             UITimer.innerHTML = timer.toString();
             decreaseTimer();
         }, 1000);
+    }
+    if (timer === 0) {
+        const UIScore = document.querySelector(".score");
+        UIScore.style.display = "flex";
+        if (player.health === enemy.health) {
+            UIScore.innerHTML = "Tie";
+        }
+        else if (player.health > enemy.health) {
+            UIScore.innerHTML = "Player 1 Wins";
+        }
+        else if (enemy.health > player.health) {
+            UIScore.innerHTML = "Player 2 Wins";
+        }
     }
 };
 decreaseTimer();

@@ -44,3 +44,13 @@
   align-items: center;
   justify-content: center;
 }
+
+.score {
+  position: absolute;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
