@@ -249,7 +249,7 @@ const animate = () => {
   }
 };
 
-let timer = 10;
+let timer = 30;
 const decreaseTimer = () => {
   if (timer > 0) {
     setTimeout(() => {
