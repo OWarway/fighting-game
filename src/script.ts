@@ -247,6 +247,29 @@ const animate = () => {
     player.health -= 10;
     playerHealthBar.style.width = player.health.toString() + "%";
   }
+
+  // End game based on health
+  if (enemy.health <= 0 || player.health <= 0) {
+    determineWinner({ player, enemy });
+  }
+};
+
+const determineWinner = ({
+  player,
+  enemy,
+}: {
+  player: Sprite;
+  enemy: Sprite;
+}) => {
+  const UIScore = document.querySelector(".score") as HTMLElement;
+  UIScore.style.display = "flex";
+  if (player.health === enemy.health) {
+    UIScore.innerHTML = "Tie";
+  } else if (player.health > enemy.health) {
+    UIScore.innerHTML = "Player 1 Wins";
+  } else if (enemy.health > player.health) {
+    UIScore.innerHTML = "Player 2 Wins";
+  }
 };
 
 let timer = 30;
@@ -262,15 +285,7 @@ const decreaseTimer = () => {
   }
 
   if (timer === 0) {
-    const UIScore = document.querySelector(".score") as HTMLElement;
-    UIScore.style.display = "flex";
-    if (player.health === enemy.health) {
-      UIScore.innerHTML = "Tie";
-    } else if (player.health > enemy.health) {
-      UIScore.innerHTML = "Player 1 Wins";
-    } else if (enemy.health > player.health) {
-      UIScore.innerHTML = "Player 2 Wins";
-    }
+    determineWinner({ player, enemy });
   }
 };
 
