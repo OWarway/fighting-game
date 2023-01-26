@@ -250,17 +250,20 @@ const animate = () => {
 
   // End game based on health
   if (enemy.health <= 0 || player.health <= 0) {
-    determineWinner({ player, enemy });
+    determineWinner({ player, enemy, timerId });
   }
 };
 
 const determineWinner = ({
   player,
   enemy,
+  timerId,
 }: {
   player: Sprite;
   enemy: Sprite;
+  timerId: number;
 }) => {
+  clearTimeout(timerId);
   const UIScore = document.querySelector(".score") as HTMLElement;
   UIScore.style.display = "flex";
   if (player.health === enemy.health) {
@@ -273,9 +276,10 @@ const determineWinner = ({
 };
 
 let timer = 30;
+let timerId: number;
 const decreaseTimer = () => {
   if (timer > 0) {
-    setTimeout(() => {
+    timerId = setTimeout(() => {
       timer--;
       const UITimer = document.querySelector(".timer") as HTMLElement;
       UITimer.innerHTML = timer.toString();
@@ -285,7 +289,7 @@ const decreaseTimer = () => {
   }
 
   if (timer === 0) {
-    determineWinner({ player, enemy });
+    determineWinner({ player, enemy, timerId });
   }
 };
 
