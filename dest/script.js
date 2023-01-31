@@ -155,11 +155,30 @@ const animate = () => {
         player.health -= 10;
         playerHealthBar.style.width = player.health.toString() + "%";
     }
+    // End game based on health
+    if (enemy.health <= 0 || player.health <= 0) {
+        determineWinner({ player, enemy, timerId });
+    }
 };
-let timer = 10;
+const determineWinner = ({ player, enemy, timerId, }) => {
+    clearTimeout(timerId);
+    const UIScore = document.querySelector(".score");
+    UIScore.style.display = "flex";
+    if (player.health === enemy.health) {
+        UIScore.innerHTML = "Tie";
+    }
+    else if (player.health > enemy.health) {
+        UIScore.innerHTML = "Player 1 Wins";
+    }
+    else if (enemy.health > player.health) {
+        UIScore.innerHTML = "Player 2 Wins";
+    }
+};
+let timer = 30;
+let timerId;
 const decreaseTimer = () => {
     if (timer > 0) {
-        setTimeout(() => {
+        timerId = setTimeout(() => {
             timer--;
             const UITimer = document.querySelector(".timer");
             UITimer.innerHTML = timer.toString();
@@ -167,17 +186,7 @@ const decreaseTimer = () => {
         }, 1000);
     }
     if (timer === 0) {
-        const UIScore = document.querySelector(".score");
-        UIScore.style.display = "flex";
-        if (player.health === enemy.health) {
-            UIScore.innerHTML = "Tie";
-        }
-        else if (player.health > enemy.health) {
-            UIScore.innerHTML = "Player 1 Wins";
-        }
-        else if (enemy.health > player.health) {
-            UIScore.innerHTML = "Player 2 Wins";
-        }
+        determineWinner({ player, enemy, timerId });
     }
 };
 decreaseTimer();
